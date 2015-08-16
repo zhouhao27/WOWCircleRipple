@@ -53,7 +53,6 @@ import UIKit
             layer.borderColor = UIColor.clearColor().CGColor
             
             var newBounds = getNewBounds()
-            //backLayer!.cornerRadius = newBounds.width / 2
             backLayer!.borderWidth = layer.borderWidth
             backLayer!.borderColor = originalBorderColor
             
@@ -61,14 +60,11 @@ import UIKit
             animRadius.toValue = newBounds.width / 2
             animRadius.fillMode = kCAFillModeForwards
             animRadius.removedOnCompletion = false
-            //backLayer!.addAnimation(animRadius, forKey: "")
             
             let animation = CABasicAnimation(keyPath: "bounds")
             animation.toValue = NSValue(CGRect: newBounds)
-            //animation.duration = 0.3
             animation.fillMode = kCAFillModeForwards
             animation.removedOnCompletion = false
-            //backLayer!.addAnimation(animation, forKey: "")
             
             let animGroup = CAAnimationGroup()
             animGroup.animations = [animRadius,animation]
@@ -80,6 +76,49 @@ import UIKit
                 self.backLayer!.bounds = newBounds
                 self.startAnimating()
             })
+        }
+    }
+    
+    public func stopAction(toView : UIView, animated : Bool) {
+        
+        if actionInProgress {
+            
+            actionInProgress = false
+            
+            // remove ripples
+            for subLayer in ripples {
+                subLayer.removeAllAnimations()
+                subLayer.removeFromSuperlayer()
+            }
+            
+            self.backLayer!.removeAllAnimations()
+         
+            // expand
+            toView.clipsToBounds = true // don't allow the subview out of the boundary
+            
+            let animScale = CABasicAnimation(keyPath: "transform.scale")
+            let offset = max(toView.bounds.width - backLayer!.bounds.origin.x/2, toView.bounds.height - backLayer!.bounds.origin.y/2)
+            let scale = offset / (backLayer!.bounds.width/2)
+            animScale.toValue = scale
+            
+            let animAlpha = CABasicAnimation(keyPath: "opacity")
+            animAlpha.fromValue = 1
+            animAlpha.toValue = 0
+            
+            let animGroup = CAAnimationGroup()
+            animGroup.animations = [animScale,animAlpha]
+            animGroup.duration = 0.3
+            animGroup.fillMode = kCAFillModeForwards
+            animGroup.removedOnCompletion = false
+            animGroup.completion = {
+                finished in
+                self.backLayer!.removeAllAnimations()
+                self.backLayer!.removeFromSuperlayer()
+                self.backLayer = nil
+            }
+            
+            backLayer!.addAnimation(animGroup, forKey: "group")
+            
         }
     }
     
@@ -98,12 +137,35 @@ import UIKit
             // restore original status
             if animated {
                 
+                let animRadius = CABasicAnimation(keyPath: "cornerRadius")
+                animRadius.toValue = layer.cornerRadius
+                
+                let animation = CABasicAnimation(keyPath: "bounds")
+                animation.toValue = NSValue(CGRect: layer.bounds)
+                
+                let animScale = CABasicAnimation(keyPath: "transform.scale")
+                animScale.fromValue = 0
+                animScale.toValue = 1
+                
+                let animGroup = CAAnimationGroup()
+                animGroup.animations = [animRadius,animation,animScale]
+                animGroup.duration = 0.3
+                animGroup.fillMode = kCAFillModeForwards
+                animGroup.removedOnCompletion = false
+                animGroup.completion = {
+                    finished in
+                    self.backLayer!.removeAllAnimations()
+                    self.resetToOriginalStatus()
+                }
+                
+                backLayer!.addAnimation(animGroup, forKey: "group")
+                
+            } else {
+                self.backLayer!.removeAllAnimations()
+                self.resetToOriginalStatus()                
             }
             
-            backLayer!.removeAllAnimations()
-            
-            resetToOriginalStatus()
-        }        
+        }
     }
     
     // MARK: private methods

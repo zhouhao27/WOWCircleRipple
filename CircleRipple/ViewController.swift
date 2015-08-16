@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
         button.startAction()
         GCD.delay(2) { () -> () in
-            self.button.stopAction(true)
+            self.button.stopAction(self.view, animated: true)
         }
     }
 
