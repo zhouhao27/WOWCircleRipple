@@ -15,6 +15,7 @@
 		387CBB1B1B7F3461003D0732 /* CircleRippleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB1A1B7F3461003D0732 /* CircleRippleTests.swift */; };
 		387CBB261B7F421B003D0732 /* WOWCircleRippleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB251B7F421B003D0732 /* WOWCircleRippleButton.swift */; };
 		387CBB2C1B7F9763003D0732 /* GCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB2B1B7F9763003D0732 /* GCD.swift */; };
+		387CBB2E1B803877003D0732 /* CAAnimation+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB2D1B803877003D0732 /* CAAnimation+Closure.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		387CBB1C1B7F3461003D0732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		387CBB251B7F421B003D0732 /* WOWCircleRippleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOWCircleRippleButton.swift; sourceTree = "<group>"; };
 		387CBB2B1B7F9763003D0732 /* GCD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCD.swift; sourceTree = "<group>"; };
+		387CBB2D1B803877003D0732 /* CAAnimation+Closure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAAnimation+Closure.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		387CBB041B7F3461003D0732 /* CircleRipple */ = {
 			isa = PBXGroup;
 			children = (
+				387CBB2D1B803877003D0732 /* CAAnimation+Closure.swift */,
 				387CBB051B7F3461003D0732 /* AppDelegate.swift */,
 				387CBB071B7F3461003D0732 /* ViewController.swift */,
 				387CBB091B7F3461003D0732 /* Main.storyboard */,
@@ -206,6 +209,7 @@
 				387CBB081B7F3461003D0732 /* ViewController.swift in Sources */,
 				387CBB261B7F421B003D0732 /* WOWCircleRippleButton.swift in Sources */,
 				387CBB061B7F3461003D0732 /* AppDelegate.swift in Sources */,
+				387CBB2E1B803877003D0732 /* CAAnimation+Closure.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

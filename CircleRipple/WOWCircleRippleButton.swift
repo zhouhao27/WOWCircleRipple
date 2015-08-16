@@ -46,13 +46,6 @@ import UIKit
             originalBackgroundColor = backgroundColor!
             backgroundColor = UIColor.clearColor()
             
-//            backLayer = CALayer()
-//            backLayer!.masksToBounds = true
-//            backLayer!.frame = bounds
-//            backLayer!.backgroundColor = originalBackgroundColor.CGColor
-//            
-//            layer.addSublayer(backLayer!)
-
             backLayer = createBacklayer()
             
             // animate to cicle (bounds)
@@ -60,15 +53,27 @@ import UIKit
             layer.borderColor = UIColor.clearColor().CGColor
             
             var newBounds = getNewBounds()
-            backLayer!.cornerRadius = newBounds.width / 2
+            //backLayer!.cornerRadius = newBounds.width / 2
             backLayer!.borderWidth = layer.borderWidth
             backLayer!.borderColor = originalBorderColor
+            
+            let animRadius = CABasicAnimation(keyPath: "cornerRadius")
+            animRadius.toValue = newBounds.width / 2
+            animRadius.fillMode = kCAFillModeForwards
+            animRadius.removedOnCompletion = false
+            //backLayer!.addAnimation(animRadius, forKey: "")
+            
             let animation = CABasicAnimation(keyPath: "bounds")
             animation.toValue = NSValue(CGRect: newBounds)
-            animation.duration = 0.3
+            //animation.duration = 0.3
             animation.fillMode = kCAFillModeForwards
             animation.removedOnCompletion = false
-            backLayer!.addAnimation(animation, forKey: "")
+            //backLayer!.addAnimation(animation, forKey: "")
+            
+            let animGroup = CAAnimationGroup()
+            animGroup.animations = [animRadius,animation]
+            animGroup.duration = 0.3
+            backLayer!.addAnimation(animGroup, forKey: "group")
             
             GCD.delay(0.2, block: { () -> () in
                 
@@ -96,14 +101,9 @@ import UIKit
             }
             
             backLayer!.removeAllAnimations()
-            backLayer!.removeFromSuperlayer()
-            backLayer = nil
             
-            layer.backgroundColor = UIColor.clearColor().CGColor
-            layer.borderColor = originalBorderColor
-            backgroundColor = originalBackgroundColor
-        }
-        
+            resetToOriginalStatus()
+        }        
     }
     
     // MARK: private methods
@@ -120,6 +120,12 @@ import UIKit
     
     private func resetToOriginalStatus() {
         
+        backLayer!.removeFromSuperlayer()
+        backLayer = nil
+        
+        layer.backgroundColor = UIColor.clearColor().CGColor
+        layer.borderColor = originalBorderColor
+        backgroundColor = originalBackgroundColor
     }
     
     private func getNewBounds() -> CGRect {
