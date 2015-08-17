@@ -27,12 +27,14 @@ import UIKit
             layer.borderColor = borderColor?.CGColor
         }
     }
+    @IBInspectable var rippleLineWidth            : CGFloat = 2
     
     // MARK: private variables
     private var actionInProgress            : Bool = false
     var backLayer                           : CALayer?
     var originalBackgroundColor = UIColor.clearColor()
     var originalBorderColor = UIColor.clearColor().CGColor
+    var originalTitleColor = UIColor.whiteColor()
     var ripples = [CALayer]()
         
     // MARK: public methods
@@ -45,6 +47,8 @@ import UIKit
             // add background layer
             originalBackgroundColor = backgroundColor!
             backgroundColor = UIColor.clearColor()
+            originalTitleColor = self.titleColorForState(.Normal)!
+            setTitleColor(UIColor.clearColor(), forState: .Normal)
             
             backLayer = createBacklayer()
             
@@ -168,6 +172,10 @@ import UIKit
         }
     }
     
+    public func reset() {
+        resetToOriginalStatus()
+    }
+    
     // MARK: private methods
     private func createBacklayer() -> CALayer {
         
@@ -182,12 +190,15 @@ import UIKit
     
     private func resetToOriginalStatus() {
         
-        backLayer!.removeFromSuperlayer()
-        backLayer = nil
+        if backLayer != nil {
+            backLayer!.removeFromSuperlayer()
+            backLayer = nil
+        }
         
         layer.backgroundColor = UIColor.clearColor().CGColor
         layer.borderColor = originalBorderColor
         backgroundColor = originalBackgroundColor
+        setTitleColor(originalTitleColor, forState: .Normal)
     }
     
     private func getNewBounds() -> CGRect {
@@ -235,7 +246,7 @@ import UIKit
         
         circle.fillColor = UIColor.clearColor().CGColor
         circle.strokeColor = originalBackgroundColor.CGColor
-        circle.lineWidth = 3
+        circle.lineWidth = rippleLineWidth
         
         self.layer.addSublayer(circle)
         
