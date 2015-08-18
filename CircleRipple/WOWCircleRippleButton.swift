@@ -36,7 +36,20 @@ import UIKit
     var originalBorderColor = UIColor.clearColor().CGColor
     var originalTitleColor = UIColor.whiteColor()
     var ripples = [CALayer]()
+    
+    // MARK: override
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         
+        setup()
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        setup()
+    }
+    
     // MARK: public methods
     public func startAction() {
         
@@ -96,7 +109,7 @@ import UIKit
             }
             
             self.backLayer!.removeAllAnimations()
-         
+            
             // expand
             toView.clipsToBounds = true // don't allow the subview out of the boundary
             
@@ -131,7 +144,7 @@ import UIKit
         if actionInProgress {
             
             actionInProgress = false
-
+            
             // remove ripples
             for subLayer in ripples {
                 subLayer.removeAllAnimations()
@@ -166,7 +179,7 @@ import UIKit
                 
             } else {
                 self.backLayer!.removeAllAnimations()
-                self.resetToOriginalStatus()                
+                self.resetToOriginalStatus()
             }
             
         }
@@ -177,6 +190,26 @@ import UIKit
     }
     
     // MARK: private methods
+    func setup() {
+        
+        addTarget(self, action: "onClicked", forControlEvents: UIControlEvents.TouchUpInside)
+    }
+    
+    func onClicked() {
+        self.transform = CGAffineTransformMakeScale(1.2, 1.2)
+        
+        UIView.animateWithDuration(0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.5,
+            initialSpringVelocity: 100.0,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: {
+                self.transform = CGAffineTransformIdentity
+            }, completion: {
+                (finished) -> Void in
+        })
+    }
+    
     private func createBacklayer() -> CALayer {
         
         let backlayer = CALayer()
@@ -214,7 +247,7 @@ import UIKit
     }
     
     private func startAnimating() {
-  
+        
         let anim = CABasicAnimation(keyPath: "transform.scale")
         anim.fromValue = 1
         anim.toValue = 0
