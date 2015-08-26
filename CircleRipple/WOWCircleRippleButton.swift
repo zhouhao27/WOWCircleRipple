@@ -129,9 +129,12 @@ import UIKit
             animGroup.removedOnCompletion = false
             animGroup.completion = {
                 finished in
-                self.backLayer!.removeAllAnimations()
-                self.backLayer!.removeFromSuperlayer()
-                self.backLayer = nil
+                
+                if self.backLayer != nil {
+                    self.backLayer!.removeAllAnimations()
+                    self.backLayer!.removeFromSuperlayer()
+                    self.backLayer = nil
+                }
             }
             
             backLayer!.addAnimation(animGroup, forKey: "group")
