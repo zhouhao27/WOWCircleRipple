@@ -11,30 +11,45 @@ import UIKit
 @IBDesignable open class WOWCircleRippleButton: UIButton {
     
     // MARK: inspectable
-    @IBInspectable var cornerRadius         : CGFloat = 0 {
+    @IBInspectable var cornerRadius : CGFloat = 0 {
         didSet {
             layer.cornerRadius = cornerRadius
             layer.masksToBounds = cornerRadius > 0
         }
     }
-    @IBInspectable var borderWidth          : CGFloat = 0 {
+    @IBInspectable var borderWidth : CGFloat = 0 {
         didSet {
             layer.borderWidth = borderWidth
         }
     }
-    @IBInspectable var borderColor          : UIColor? {
+    @IBInspectable var borderColor : UIColor? {
         didSet {
             layer.borderColor = borderColor?.cgColor
         }
     }
+    @IBInspectable var rippleLineWidth : CGFloat = 2
     
     // MARK: private variables
-    fileprivate var actionInProgress        : Bool = false
-    var backLayer                           : CALayer?
+    fileprivate var actionInProgress : Bool = false
+    var backLayer : CALayer?
+    
     var originalBackgroundColor = UIColor.clear
     var originalBorderColor = UIColor.clear.cgColor
+    var originalTitleColor = UIColor.white
+    
     var ripples = [CALayer]()
-        
+    
+    // MARK: override
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)        
+        setup()
+    }
+    
     // MARK: public methods
     open func startAction() {
         
@@ -45,6 +60,8 @@ import UIKit
             // add background layer
             originalBackgroundColor = backgroundColor!
             backgroundColor = UIColor.clear
+            originalTitleColor = self.titleColor(for: .normal)!
+            setTitleColor(UIColor.clear, for: .normal)
             
             backLayer = createBacklayer()
             
@@ -92,7 +109,7 @@ import UIKit
             }
             
             self.backLayer!.removeAllAnimations()
-         
+            
             // expand
             toView.clipsToBounds = true // don't allow the subview out of the boundary
             
@@ -112,9 +129,12 @@ import UIKit
             animGroup.isRemovedOnCompletion = false
             animGroup.completion = {
                 finished in
-                self.backLayer!.removeAllAnimations()
-                self.backLayer!.removeFromSuperlayer()
-                self.backLayer = nil
+                
+                if self.backLayer != nil {
+                    self.backLayer!.removeAllAnimations()
+                    self.backLayer!.removeFromSuperlayer()
+                    self.backLayer = nil
+                }
             }
             
             backLayer!.add(animGroup, forKey: "group")
@@ -127,7 +147,7 @@ import UIKit
         if actionInProgress {
             
             actionInProgress = false
-
+            
             // remove ripples
             for subLayer in ripples {
                 subLayer.removeAllAnimations()
@@ -162,13 +182,37 @@ import UIKit
                 
             } else {
                 self.backLayer!.removeAllAnimations()
-                self.resetToOriginalStatus()                
+                self.resetToOriginalStatus()
             }
             
         }
     }
     
+    public func reset() {
+        resetToOriginalStatus()
+    }
+    
     // MARK: private methods
+
+    func setup() {
+        addTarget(self, action: #selector(WOWCircleRippleButton.onClicked), for: UIControlEvents.touchUpInside)
+    }
+    
+    func onClicked() {
+        self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        
+        UIView.animate(withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.5,
+            initialSpringVelocity: 100.0,
+            options: UIViewAnimationOptions.curveEaseInOut,
+            animations: {
+                self.transform = CGAffineTransform.identity
+            }, completion: {
+                (finished) -> Void in
+        })
+    }
+    
     fileprivate func createBacklayer() -> CALayer {
         
         let backlayer = CALayer()
@@ -182,12 +226,15 @@ import UIKit
     
     fileprivate func resetToOriginalStatus() {
         
-        backLayer!.removeFromSuperlayer()
-        backLayer = nil
+        if backLayer != nil {
+            backLayer!.removeFromSuperlayer()
+            backLayer = nil
+        }
         
         layer.backgroundColor = UIColor.clear.cgColor
         layer.borderColor = originalBorderColor
         backgroundColor = originalBackgroundColor
+        setTitleColor(originalTitleColor, for: .normal)
     }
     
     fileprivate func getNewBounds() -> CGRect {
@@ -203,7 +250,6 @@ import UIKit
     }
     
     fileprivate func startAnimating() {
-  
         let anim = CABasicAnimation(keyPath: "transform.scale")
         anim.fromValue = 1
         anim.toValue = 0
@@ -235,7 +281,8 @@ import UIKit
         
         circle.fillColor = UIColor.clear.cgColor
         circle.strokeColor = originalBackgroundColor.cgColor
-        circle.lineWidth = 3
+//        circle.lineWidth = 3
+        circle.lineWidth = rippleLineWidth
         
         self.layer.addSublayer(circle)
         
