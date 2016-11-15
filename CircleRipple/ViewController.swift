@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         
     }
 
-    @IBAction func onClick(sender: AnyObject) {
+    @IBAction func onClick(_ sender: AnyObject) {
         
         button.startAction()
         GCD.delay(2) { () -> () in
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         }
     }
 
-    @IBAction func onLogin(sender: AnyObject) {
+    @IBAction func onLogin(_ sender: AnyObject) {
         
         loginButton.startAction()
         GCD.delay(3) { () -> () in

@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable public class WOWCircleRippleButton: UIButton {
+@IBDesignable open class WOWCircleRippleButton: UIButton {
     
     // MARK: inspectable
     @IBInspectable var cornerRadius         : CGFloat = 0 {
@@ -24,19 +24,19 @@ import UIKit
     }
     @IBInspectable var borderColor          : UIColor? {
         didSet {
-            layer.borderColor = borderColor?.CGColor
+            layer.borderColor = borderColor?.cgColor
         }
     }
     
     // MARK: private variables
-    private var actionInProgress            : Bool = false
+    fileprivate var actionInProgress        : Bool = false
     var backLayer                           : CALayer?
-    var originalBackgroundColor = UIColor.clearColor()
-    var originalBorderColor = UIColor.clearColor().CGColor
+    var originalBackgroundColor = UIColor.clear
+    var originalBorderColor = UIColor.clear.cgColor
     var ripples = [CALayer]()
         
     // MARK: public methods
-    public func startAction() {
+    open func startAction() {
         
         if !actionInProgress {
             
@@ -44,32 +44,32 @@ import UIKit
             
             // add background layer
             originalBackgroundColor = backgroundColor!
-            backgroundColor = UIColor.clearColor()
+            backgroundColor = UIColor.clear
             
             backLayer = createBacklayer()
             
             // animate to cicle (bounds)
             originalBorderColor = layer.borderColor!
-            layer.borderColor = UIColor.clearColor().CGColor
+            layer.borderColor = UIColor.clear.cgColor
             
-            var newBounds = getNewBounds()
+            let newBounds = getNewBounds()
             backLayer!.borderWidth = layer.borderWidth
             backLayer!.borderColor = originalBorderColor
             
             let animRadius = CABasicAnimation(keyPath: "cornerRadius")
             animRadius.toValue = newBounds.width / 2
             animRadius.fillMode = kCAFillModeForwards
-            animRadius.removedOnCompletion = false
+            animRadius.isRemovedOnCompletion = false
             
             let animation = CABasicAnimation(keyPath: "bounds")
-            animation.toValue = NSValue(CGRect: newBounds)
+            animation.toValue = NSValue(cgRect: newBounds)
             animation.fillMode = kCAFillModeForwards
-            animation.removedOnCompletion = false
+            animation.isRemovedOnCompletion = false
             
             let animGroup = CAAnimationGroup()
             animGroup.animations = [animRadius,animation]
             animGroup.duration = 0.3
-            backLayer!.addAnimation(animGroup, forKey: "group")
+            backLayer!.add(animGroup, forKey: "group")
             
             GCD.delay(0.2, block: { () -> () in
                 
@@ -79,7 +79,7 @@ import UIKit
         }
     }
     
-    public func stopAction(toView : UIView, animated : Bool) {
+    open func stopAction(_ toView : UIView, animated : Bool) {
         
         if actionInProgress {
             
@@ -109,7 +109,7 @@ import UIKit
             animGroup.animations = [animScale,animAlpha]
             animGroup.duration = 0.3
             animGroup.fillMode = kCAFillModeForwards
-            animGroup.removedOnCompletion = false
+            animGroup.isRemovedOnCompletion = false
             animGroup.completion = {
                 finished in
                 self.backLayer!.removeAllAnimations()
@@ -117,12 +117,12 @@ import UIKit
                 self.backLayer = nil
             }
             
-            backLayer!.addAnimation(animGroup, forKey: "group")
+            backLayer!.add(animGroup, forKey: "group")
             
         }
     }
     
-    public func stopAction(animated : Bool) {
+    open func stopAction(_ animated : Bool) {
         
         if actionInProgress {
             
@@ -141,7 +141,7 @@ import UIKit
                 animRadius.toValue = layer.cornerRadius
                 
                 let animation = CABasicAnimation(keyPath: "bounds")
-                animation.toValue = NSValue(CGRect: layer.bounds)
+                animation.toValue = NSValue(cgRect: layer.bounds)
                 
                 let animScale = CABasicAnimation(keyPath: "transform.scale")
                 animScale.fromValue = 0
@@ -151,14 +151,14 @@ import UIKit
                 animGroup.animations = [animRadius,animation,animScale]
                 animGroup.duration = 0.3
                 animGroup.fillMode = kCAFillModeForwards
-                animGroup.removedOnCompletion = false
+                animGroup.isRemovedOnCompletion = false
                 animGroup.completion = {
                     finished in
                     self.backLayer!.removeAllAnimations()
                     self.resetToOriginalStatus()
                 }
                 
-                backLayer!.addAnimation(animGroup, forKey: "group")
+                backLayer!.add(animGroup, forKey: "group")
                 
             } else {
                 self.backLayer!.removeAllAnimations()
@@ -169,49 +169,49 @@ import UIKit
     }
     
     // MARK: private methods
-    private func createBacklayer() -> CALayer {
+    fileprivate func createBacklayer() -> CALayer {
         
         let backlayer = CALayer()
         backlayer.masksToBounds = true
         backlayer.frame = bounds
-        backlayer.backgroundColor = originalBackgroundColor.CGColor
+        backlayer.backgroundColor = originalBackgroundColor.cgColor
         
         layer.addSublayer(backlayer)
         return backlayer
     }
     
-    private func resetToOriginalStatus() {
+    fileprivate func resetToOriginalStatus() {
         
         backLayer!.removeFromSuperlayer()
         backLayer = nil
         
-        layer.backgroundColor = UIColor.clearColor().CGColor
+        layer.backgroundColor = UIColor.clear.cgColor
         layer.borderColor = originalBorderColor
         backgroundColor = originalBackgroundColor
     }
     
-    private func getNewBounds() -> CGRect {
+    fileprivate func getNewBounds() -> CGRect {
         
         var newBounds : CGRect
         if layer.bounds.width > layer.bounds.height {
-            newBounds = CGRectMake(0, 0, layer.bounds.height, layer.bounds.height)
+            newBounds = CGRect(x: 0, y: 0, width: layer.bounds.height, height: layer.bounds.height)
         } else {
-            newBounds = CGRectMake(0, 0, layer.bounds.width, layer.bounds.width)
+            newBounds = CGRect(x: 0, y: 0, width: layer.bounds.width, height: layer.bounds.width)
         }
         return newBounds
         
     }
     
-    private func startAnimating() {
+    fileprivate func startAnimating() {
   
         let anim = CABasicAnimation(keyPath: "transform.scale")
         anim.fromValue = 1
         anim.toValue = 0
         anim.duration = 0.2
-        anim.removedOnCompletion = false
+        anim.isRemovedOnCompletion = false
         anim.fillMode = kCAFillModeForwards
         
-        backLayer!.addAnimation(anim, forKey: "scale")
+        backLayer!.add(anim, forKey: "scale")
         
         GCD.delay(0.1) { () -> () in
             self.ripple()
@@ -224,7 +224,7 @@ import UIKit
         }
     }
     
-    private func ripple() {
+    fileprivate func ripple() {
         
         let circle = CAShapeLayer()
         
@@ -233,8 +233,8 @@ import UIKit
         circle.path = pathFor(backLayer!, radius: backLayer!.bounds.width/2)
         circle.frame = backLayer!.frame
         
-        circle.fillColor = UIColor.clearColor().CGColor
-        circle.strokeColor = originalBackgroundColor.CGColor
+        circle.fillColor = UIColor.clear.cgColor
+        circle.strokeColor = originalBackgroundColor.cgColor
         circle.lineWidth = 3
         
         self.layer.addSublayer(circle)
@@ -244,29 +244,29 @@ import UIKit
         animScale.toValue = 1
         
         circle.transform = CATransform3DMakeScale(1.0,1.0,1.0)
-        circle.addAnimation(animScale, forKey: "scale")
+        circle.add(animScale, forKey: "scale")
         
         let animAlpha = CABasicAnimation(keyPath: "opacity")
         animAlpha.fromValue = 1
         animAlpha.toValue = 0
-        animAlpha.removedOnCompletion = false
+        animAlpha.isRemovedOnCompletion = false
         animAlpha.fillMode = kCAFillModeForwards
         
-        circle.addAnimation(animAlpha, forKey: "alpha")
+        circle.add(animAlpha, forKey: "alpha")
         
         let animGroup = CAAnimationGroup()
         animGroup.animations = [animScale,animAlpha]
         animGroup.repeatCount = Float.infinity
         animGroup.duration = 0.8
-        circle.addAnimation(animGroup, forKey: "")
+        circle.add(animGroup, forKey: "")
         
         ripples.append(circle)
     }
     
-    private func pathFor(layer : CALayer, radius : CGFloat) -> CGPathRef {
+    fileprivate func pathFor(_ layer : CALayer, radius : CGFloat) -> CGPath {
         
-        let center = CGPointMake(layer.bounds.width / 2, layer.bounds.width / 2)
-        return UIBezierPath(arcCenter: center, radius: radius, startAngle: 0.0, endAngle: CGFloat(2 * M_PI), clockwise: false).CGPath
+        let center = CGPoint(x: layer.bounds.width / 2, y: layer.bounds.width / 2)
+        return UIBezierPath(arcCenter: center, radius: radius, startAngle: 0.0, endAngle: CGFloat(2 * M_PI), clockwise: false).cgPath
     }
     
 }

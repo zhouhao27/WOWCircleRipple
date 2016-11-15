@@ -15,7 +15,7 @@
 		387CBB1B1B7F3461003D0732 /* CircleRippleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB1A1B7F3461003D0732 /* CircleRippleTests.swift */; };
 		387CBB261B7F421B003D0732 /* WOWCircleRippleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB251B7F421B003D0732 /* WOWCircleRippleButton.swift */; };
 		387CBB2C1B7F9763003D0732 /* GCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB2B1B7F9763003D0732 /* GCD.swift */; };
-		387CBB2E1B803877003D0732 /* CAAnimation+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387CBB2D1B803877003D0732 /* CAAnimation+Closure.swift */; };
+		38C7DC461DDABCA9007BD1A3 /* CAAnimation+Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C7DC451DDABCA9007BD1A3 /* CAAnimation+Closure.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,7 +41,7 @@
 		387CBB1C1B7F3461003D0732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		387CBB251B7F421B003D0732 /* WOWCircleRippleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WOWCircleRippleButton.swift; sourceTree = "<group>"; };
 		387CBB2B1B7F9763003D0732 /* GCD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCD.swift; sourceTree = "<group>"; };
-		387CBB2D1B803877003D0732 /* CAAnimation+Closure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAAnimation+Closure.swift"; sourceTree = "<group>"; };
+		38C7DC451DDABCA9007BD1A3 /* CAAnimation+Closure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAAnimation+Closure.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +83,7 @@
 		387CBB041B7F3461003D0732 /* CircleRipple */ = {
 			isa = PBXGroup;
 			children = (
-				387CBB2D1B803877003D0732 /* CAAnimation+Closure.swift */,
+				38C7DC451DDABCA9007BD1A3 /* CAAnimation+Closure.swift */,
 				387CBB051B7F3461003D0732 /* AppDelegate.swift */,
 				387CBB071B7F3461003D0732 /* ViewController.swift */,
 				387CBB091B7F3461003D0732 /* Main.storyboard */,
@@ -149,14 +149,16 @@
 		387CBAFA1B7F3461003D0732 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = Zeus;
 				TargetAttributes = {
 					387CBB011B7F3461003D0732 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0810;
 					};
 					387CBB151B7F3461003D0732 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0810;
 						TestTargetID = 387CBB011B7F3461003D0732;
 					};
 				};
@@ -209,7 +211,7 @@
 				387CBB081B7F3461003D0732 /* ViewController.swift in Sources */,
 				387CBB261B7F421B003D0732 /* WOWCircleRippleButton.swift in Sources */,
 				387CBB061B7F3461003D0732 /* AppDelegate.swift in Sources */,
-				387CBB2E1B803877003D0732 /* CAAnimation+Closure.swift in Sources */,
+				38C7DC461DDABCA9007BD1A3 /* CAAnimation+Closure.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,8 +266,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -308,8 +312,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -328,6 +334,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -340,6 +347,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wowtv.CircleRipple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -351,6 +359,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wowtv.CircleRipple;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -362,6 +371,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wowtv.CircleRippleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CircleRipple.app/CircleRipple";
 			};
 			name = Debug;
@@ -374,6 +384,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.wowtv.CircleRippleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CircleRipple.app/CircleRipple";
 			};
 			name = Release;
